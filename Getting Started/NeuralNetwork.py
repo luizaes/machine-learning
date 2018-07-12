@@ -1,11 +1,11 @@
 '''
 	Python implementation of a simple 2 layer Neural Network 
-	that given a input [x, y, z] where x, y and z are either 0 or 1
+	that given an input [x, y, z] where x, y and z are either 0 or 1
 	outputs the result of the corresponding logic operation especified on Y.
 
 	    X	         Y
 	|0, 0, 0|      | 0 |
-	|0, 1, 0| 	   | 0 |
+	|0, 1, 0|      | 0 |
 	|1, 0, 0|   =  | 0 |    (AND)
 	|1, 1, 1|      | 1 |
 
@@ -34,8 +34,8 @@ class NeuralNetwork(object):
 
 	# feed forward
 	def feedForward(self):
-		self.output = self.sigmoid(numpy.dot(self.layer1, self.weight2), False)
 		self.layer1 = self.sigmoid(numpy.dot(self.x, self.weight1), False)
+		self.output = self.sigmoid(numpy.dot(self.layer1, self.weight2), False)
 
 	# do back propagation to update the weights 
 	def backPropagation(self):
@@ -46,3 +46,6 @@ class NeuralNetwork(object):
 
 	def getOutput(self):
 		return self.output
+
+	def setX(self, x):
+		self.x = x
