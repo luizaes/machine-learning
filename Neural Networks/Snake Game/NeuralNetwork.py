@@ -10,9 +10,9 @@ class NeuralNetwork(object):
 	layer1 = 0
 
 	def __init__(self):
-		self.x = numpy.array([[0, 0, 0, 0]], numpy.float)
-		self.weight1 = numpy.random.rand((self.x.shape[1]), 4) % 100
-		self.weight2 = numpy.random.rand(4,4) % 100
+		self.x = numpy.array([[0, 0, 0, 0, 0]], numpy.float)
+		self.weight1 = numpy.random.rand((self.x.shape[1]), 12) % 100
+		self.weight2 = numpy.random.rand(12,4) % 100
 
 	# using sigmoid as the activation function
 	def sigmoid(self, num, arg):
@@ -39,4 +39,4 @@ class NeuralNetwork(object):
 		self.x = x
 		self.y = y
 		self.output = numpy.zeros(self.y.shape)
-		self.layer1 = numpy.zeros((1, 4))
+		self.layer1 = numpy.zeros((1, 12))

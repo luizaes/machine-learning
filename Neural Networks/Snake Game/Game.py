@@ -14,6 +14,7 @@ class Game(object):
 	myfont = 0
 	loseBool = False
 	foodBool = False
+	obstacle = False
 
 	"""docstring for Game"""
 	def __init__(self):
@@ -63,13 +64,13 @@ class Game(object):
 			elif x > foodPosition[0] and y < foodPosition[1]:
 				res = 2
 			elif x < foodPosition[0] and y < foodPosition[1]:
-				res = 2
+				res = 0
 			elif x < foodPosition[0] and y > foodPosition[1]:
-				res = 3
+				res = 0
 			elif x > foodPosition[0] and y == foodPosition[1]:
 				res = 2
 			elif x < foodPosition[0] and y == foodPosition[1]:
-				res = 2
+				res = 0
 			elif x == foodPosition[0] and y > foodPosition[1]:
 				res = 3
 			elif x == foodPosition[0] and y < foodPosition[1]:
@@ -80,17 +81,17 @@ class Game(object):
 			elif x > foodPosition[0] and y < foodPosition[1]:
 				res = 2
 			elif x < foodPosition[0] and y < foodPosition[1]:
-				res = 3
+				res = 0
 			elif x < foodPosition[0] and y > foodPosition[1]:
 				res = 3
 			elif x > foodPosition[0] and y == foodPosition[1]:
-				res = 2
+				res = 1
 			elif x < foodPosition[0] and y == foodPosition[1]:
 				res = 3
 			elif x == foodPosition[0] and y > foodPosition[1]:
 				res = 3
 			elif x == foodPosition[0] and y < foodPosition[1]:
-				res = 2
+				res = 0
 		elif dir == 2:
 			if x > foodPosition[0] and y > foodPosition[1]:
 				res = 1
@@ -107,7 +108,7 @@ class Game(object):
 			elif x == foodPosition[0] and y > foodPosition[1]:
 				res = 0
 			elif x == foodPosition[0] and y < foodPosition[1]:
-				res = 1
+				res = 2
 		else:
 			if x > foodPosition[0] and y > foodPosition[1]:
 				res = 1
@@ -122,7 +123,7 @@ class Game(object):
 			elif x < foodPosition[0] and y == foodPosition[1]:
 				res = 0
 			elif x == foodPosition[0] and y > foodPosition[1]:
-				res = 0
+				res = 3
 			elif x == foodPosition[0] and y < foodPosition[1]:
 				res = 0
 		return res
@@ -189,6 +190,21 @@ class Game(object):
 							break
 				
 
+				if self.player.direction == 0:
+					playerPosition = [self.player.positionX[0]+1, self.player.positionY[0]]
+				elif self.player.direction == 1:
+					playerPosition = [self.player.positionX[0]-1, self.player.positionY[0]]
+				elif self.player.direction == 2:
+					playerPosition = [self.player.positionX[0], self.player.positionY[0]+1]
+				else:
+					playerPosition = [self.player.positionX[0], self.player.positionY[0]-1]
+
+				# check for collision with the snake itself
+				for x in range(1, self.player.length):
+					if self.detectCollisionSnake(playerPosition[0],playerPosition[1],self.player.positionX[x], self.player.positionY[x]):
+						obstacle = True
+						break
+
 				playerPosition = [self.player.positionX[0], self.player.positionY[0]]
 				foodPosition = self.food.getPosition()
 
@@ -204,10 +220,16 @@ class Game(object):
 					output = numpy.array([[0, 0, 1, 0]], numpy.float)
 				else:
 					output = numpy.array([[0, 0, 0, 1]], numpy.float)
-
-				print(output)
-				# give NN the input and expected output
-				self.nn.set(numpy.array([foodPosition+playerPosition], numpy.float), output)	
+				
+				if self.obstacle:
+					if self.player.direction == 2:
+						output = numpy.array([0, 0, 0, 1], numpy.float)
+					else:
+						output = numpy.array([0, 0, 1, 0], numpy.float)
+					self.nn.set(numpy.array([[1] + foodPosition+playerPosition], numpy.float), output)	
+				else:	
+					self.nn.set(numpy.array([[0] + foodPosition+playerPosition], numpy.float), output)	
+					
 				self.nn.feedForward()
 				self.nn.backPropagation()
 
@@ -217,7 +239,7 @@ class Game(object):
 				dir = numpy.max(direction)
 				#print(dir)
 				y = -1
-				print(direction)
+			
 				#x = numpy.where(numpy.any(direction == dir))
 				y = list(direction[0]).index(dir)
 
