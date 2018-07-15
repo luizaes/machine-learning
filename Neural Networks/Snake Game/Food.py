@@ -4,7 +4,7 @@ from random import randint
 
 class Food(object):
 
-	step = 50
+	step = 30
 	counter = 0
 
 	"""docstring for Food"""
@@ -21,6 +21,6 @@ class Food(object):
 	def update(self):
 		self.counter = self.counter + 1
 		if self.counter > 200:
-			self.positionX = randint(2,9) * 50
-			self.positionY = randint(2,9) * 50
+			self.positionX = randint(2,9) * 30
+			self.positionY = randint(2,9) * 30
 			self.counter = 0

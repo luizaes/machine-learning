@@ -24,6 +24,7 @@ class NeuralNetwork(object):
 	def feedForward(self):
 		self.layer1 = self.sigmoid(numpy.dot(self.x, self.weight1), False)
 		self.output = self.sigmoid(numpy.dot(self.layer1, self.weight2), False)
+	
 	# do back propagation to update the weights 
 	def backPropagation(self):
 		updatedWeight2 = numpy.dot(self.layer1.T, (2*(self.y - self.output) * self.sigmoid(self.output, True)))
