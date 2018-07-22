@@ -9,13 +9,13 @@
 using namespace std;
 
 // Definitions
-#define NUM_VERTICES 20
-#define ITERATIONS 50
-#define NUM_ANTS 6
-#define ALPHA 0.5
-#define BETA 0.8
+#define NUM_VERTICES 8
+#define ITERATIONS 6000
+#define NUM_ANTS 12
+#define ALPHA 0.8
+#define BETA 1.2
 #define PHEROMONE_EVAPORATION 0.1
-#define Q 50
+#define Q 1
 
 // Global data structures
 double matrix[NUM_VERTICES][NUM_VERTICES];
@@ -69,10 +69,9 @@ public:
 	}
 
 	double route(int num) {
-		int aux, i;
-		//random_device rd;
-		//int vertex = rd() % NUM_VERTICES;
-		int vertex = 0;
+		int aux, i, j, maiorX = 0, maiorY = 0;
+		random_device rd;
+		int vertex = rd() % NUM_VERTICES;
 		double cost = 0.0;
 		int currentCity = step(vertex, num);
 		for(i = 1; i < NUM_VERTICES; i++) {
@@ -97,7 +96,7 @@ public:
 	double calcPassages(int i, int j) {
 		double sum = 0.0;
 		for(int z = 0; z < NUM_ANTS; z++) {
-			if(edges[i][j][z] == 1) {
+			if(edges[i][j][z] > 0) {
 				sum += Q / costRoute[z];
 			}
 		}
@@ -129,6 +128,7 @@ int main() {
 	int i, j, counter = 0, z;
 	ACO ant_colony;
 	double cost;
+	double costBestPath = 0.0;
 
 	// Make a fully connected graph with random weights for the edges
 	for(i = 0; i < NUM_VERTICES; i++) {
@@ -147,7 +147,7 @@ int main() {
 	// Initialize visibility matrix
 	for(i = 0; i < NUM_VERTICES; i++) {
 		for(j = 0; j < NUM_VERTICES; j++){
-			pheromoneTrail[i][j] = 1.0;
+			pheromoneTrail[i][j] = 0.1;
 			if(matrix[i][j] != 0) {
 				visibility[i][j] = 1.0 / matrix[i][j];
 			} else {
@@ -161,6 +161,7 @@ int main() {
 		cout << "Iteration: " << counter << endl;
 
 		for(i = 0; i < NUM_VERTICES; i++) {
+			costRoute[i] = 0.0;
 			for(j = 0; j < NUM_VERTICES; j++){
 				for(z = 0; z < NUM_ANTS; z++) {
 					edges[i][j][z] = 0;
@@ -172,6 +173,15 @@ int main() {
 			cout << "Ant: " << i << endl;
 			cost = ant_colony.init(i);
 			costRoute[i] = cost;
+			if(counter == ITERATIONS-1) {
+				if(i == 0) {
+					costBestPath = cost;
+				} else {
+					if(cost < costBestPath) {
+						costBestPath = cost;
+					}
+				}
+			}
 			cout << endl << "Cost: " << cost << endl;
 		}
 
@@ -179,13 +189,13 @@ int main() {
 
 		counter++;
 	}
-	
+	cout << "BEST PATH COST: " << costBestPath << endl;
 	return 0;
 }
 
 /* randomNumber - randomize a integer between 0 and 9999 */
 int randomNumber() {
 	random_device rd;
-	int distance = rd() % 10000;
+	int distance = rd() % 5000;
 	return distance;
 }
