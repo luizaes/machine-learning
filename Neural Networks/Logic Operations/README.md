@@ -1,2 +1,2 @@
 ### NN
-A simple feedforward neural network for solving logic gate operations.
+A simple fully connected 2-layer neural network for solving logic gate operations.

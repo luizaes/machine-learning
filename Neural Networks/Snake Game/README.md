@@ -1,2 +1,2 @@
 ### NN
-A simple feedforward neural network that learns how to play the snake game.
+A simple fully connected 2-layer neural network that learns how to play the snake game.
