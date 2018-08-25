@@ -21,18 +21,9 @@ void Ambiente::disporItens(int quantidade) {
       y = distribution(generator);
       placa[x][y] = 1;
   }
-
-  /*for (i = 0; i < retornaTamanho(); i++) {
-    for (j = 0; j < retornaTamanho(); j++) {
-      cout << placa[i][j] << " ";
-    }
-    cout << endl;
-  }*/
 }
 
 int Ambiente::retornaTamanho() {
-
   return 20;
-
 }
 

@@ -11,13 +11,12 @@ private:
   int posicaoX;
   int posicaoY;
   int raioVisao;
-  //int ultimaDirecao;
+  int ultimaDirecao;
 public:
   Formiga(Ambiente &ambiente);
   void posicaoInicial(Ambiente &ambiente);
   void mover(Ambiente &ambiente);
   bool getEstado();
-  void setEstado(bool est);
   int getX();
   int getY();
   int getRaioVisao();

@@ -9,8 +9,7 @@ void Formiga::posicaoInicial(Ambiente &ambiente) {
 	posicaoX = distribution(generator);
 	posicaoY = distribution(generator);
 
-	//cout << posicaoX << " " << posicaoY << endl;
-	//ultimaDirecao = secondDistribution(generator);
+	ultimaDirecao = secondDistribution(generator);
 
 }
 
@@ -27,74 +26,38 @@ void Formiga::mover(Ambiente &ambiente) {
   bool encontreiDirecao = false;
   int direcao;
 
-  //cout << "ultimaDirecao" << ultimaDirecao << endl;
-
   while(!encontreiDirecao) {
   	  direcao = distribution(generator);
-	  if(direcao == 0) { // Cima
+	  if(direcao == 0 && ultimaDirecao != 3) { // Cima
 	  	if(posicaoY + 1 < ambiente.retornaTamanho()) {
 	  		posicaoY++;
 	  		encontreiDirecao = true;
-	  		//ultimaDirecao = 0;
+	  		ultimaDirecao = 0;
 	  	}
-	  } else if(direcao == 1) { // Direita
+	  } else if(direcao == 1 && ultimaDirecao != 2) { // Direita
 	    if(posicaoX + 1 < ambiente.retornaTamanho()) {
 	    	posicaoX++;
 	    	encontreiDirecao = true;
-	    	//ultimaDirecao = 1;
+	    	ultimaDirecao = 1;
 	    }
-	  } else if(direcao == 2 ) { // Esquerda
+	  } else if(direcao == 2 && ultimaDirecao != 1) { // Esquerda
 	    if(posicaoX - 1 > 0) {
 	    	posicaoX--;
 	    	encontreiDirecao = true;
-	    	//ultimaDirecao = 2;
+	    	ultimaDirecao = 2;
 	    }
-	  } else if(direcao == 3 ){ // Baixo 3
+	  } else if(direcao == 3 && ultimaDirecao != 0){ // Baixo
 	    if(posicaoY - 1 > 0) {
 	    	posicaoY--;
 	    	encontreiDirecao = true;
-	    	//ultimaDirecao = 3;
-	    }
-	  } else if(direcao == 4) {
-	  	if(posicaoY - 1 > 0 && posicaoX - 1 > 0) {
-	    	posicaoY--;
-	    	posicaoX--;
-	    	encontreiDirecao = true;
-	    	//ultimaDirecao = 3;
-	    }
-	  } else if(direcao == 5) {
-	  	if(posicaoY - 1 > 0 && posicaoX + 1 < ambiente.retornaTamanho()) {
-	    	posicaoY--;
-	    	posicaoX++;
-	    	encontreiDirecao = true;
-	    	//ultimaDirecao = 3;
-	    }
-	  } else if(direcao == 6) {
-	  	if(posicaoY + 1 < ambiente.retornaTamanho() && posicaoX + 1 < ambiente.retornaTamanho()) {
-	    	posicaoY++;
-	    	posicaoX++;
-	    	encontreiDirecao = true;
-	    	//ultimaDirecao = 3;
-	    }
-	  } else if(direcao == 7) {
-	  	if(posicaoY + 1 < ambiente.retornaTamanho() && posicaoX - 1 > 0) {
-	    	posicaoY++;
-	    	posicaoX--;
-	    	encontreiDirecao = true;
-	    	//ultimaDirecao = 3;
+	    	ultimaDirecao = 3;
 	    }
 	  }
   }
-  //cout << "Direcao Atual" << ultimaDirecao << endl;
-
 }
 
 bool Formiga::getEstado() {
 	return estado;
-}
-
-void Formiga::setEstado(bool est) {
-	estado = est;
 }
 
 int Formiga::getX() {
@@ -123,7 +86,6 @@ int Formiga::getQuantidadeCelulas(Ambiente &ambiente) {
 			}
 		}
 	}
-
 	return contador;
 }
 
